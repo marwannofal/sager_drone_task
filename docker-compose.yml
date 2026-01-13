@@ -30,7 +30,7 @@ services:
       db:
         condition: service_healthy
     environment:
-      DJANGO_SECRET_KEY: "change-me"
+      DJANGO_SECRET_KEY: "django-insecure-t3tt(4hfr#9si_(2d^0x#dp)5x9x)t=%8jm84ag)&x6du!c1(l"
       DJANGO_DEBUG: "1"
       DJANGO_ALLOWED_HOSTS: "0.0.0.0,127.0.0.1,localhost"
       DATABASE_URL: "postgres://sager:sager@db:5432/sager"
@@ -91,7 +91,7 @@ services:
       web:
         condition: service_started
     environment:
-      DJANGO_SECRET_KEY: "change-me"
+      DJANGO_SECRET_KEY: "django-insecure-t3tt(4hfr#9si_(2d^0x#dp)5x9x)t=%8jm84ag)&x6du!c1(l"
       DJANGO_DEBUG: "1"
       DJANGO_ALLOWED_HOSTS: "0.0.0.0,127.0.0.1,localhost"
       DATABASE_URL: "postgres://sager:sager@db:5432/sager"

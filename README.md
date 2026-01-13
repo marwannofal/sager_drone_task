@@ -87,16 +87,6 @@ python manage.py loaddata drones/fixtures/003_drones.json
 python manage.py loaddata drones/fixtures/004_telemetry.json
 python manage.py bootstrap_demo
 ```
-
-If you run via Docker Compose, you can run these inside the `web` container:
-
-```bash
-docker compose exec web python manage.py loaddata drones/fixtures/002_zones.json
-docker compose exec web python manage.py loaddata drones/fixtures/003_drones.json
-docker compose exec web python manage.py loaddata drones/fixtures/004_telemetry.json
-docker compose exec web python manage.py bootstrap_demo
-```
-
 ---
 
 ## Sending telemetry via MQTT (publish to the topic)
@@ -165,7 +155,7 @@ More robust fix: add a healthcheck to Postgres + use `depends_on: condition: ser
 If you see something like “failed to bind host port … address already in use”:
 
 - change the host port mapping in `docker-compose.yml`:
-  - e.g. `"8002:8000"`
+  - e.g. `"8001:8000"`
 
 ### Consumer is not ingesting messages
 - Make sure `consumer` container is running:

@@ -74,7 +74,6 @@ class Command(BaseCommand):
                 if geofence_reason:
                     reasons.append(geofence_reason)
 
-            # de-duplicate reasons (keep order)
             reasons = list(dict.fromkeys(reasons))
             is_dangerous = bool(reasons)
 
