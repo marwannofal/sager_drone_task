@@ -1,0 +1,108 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: sager
+      POSTGRES_USER: sager
+      POSTGRES_PASSWORD: sager
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sager -d sager"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  mqtt:
+    image: eclipse-mosquitto:2
+    ports:
+      - "1884:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosqdata:/mosquitto/data
+      - mosqlog:/mosquitto/log
+
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DJANGO_SECRET_KEY: "change-me"
+      DJANGO_DEBUG: "1"
+      DJANGO_ALLOWED_HOSTS: "0.0.0.0,127.0.0.1,localhost"
+      DATABASE_URL: "postgres://sager:sager@db:5432/sager"
+      MQTT_HOST: "mqtt"
+      MQTT_PORT: "1883"
+    ports:
+      - "8001:8000"
+    volumes:
+      - .:/app
+    command:
+      - bash
+      - -lc
+      - |
+        python - <<'PY'
+        import os, time
+        import psycopg2
+        from urllib.parse import urlparse
+        u = urlparse(os.environ["DATABASE_URL"])
+        for i in range(60):
+          try:
+            psycopg2.connect(
+              dbname=u.path.lstrip("/"),
+              user=u.username,
+              password=u.password,
+              host=u.hostname,
+              port=u.port,
+              connect_timeout=2,
+            ).close()
+            print("DB ready")
+            break
+          except Exception as e:
+            print("DB not ready yet:", e)
+            time.sleep(1)
+        else:
+          raise SystemExit("DB never became ready")
+        PY
+
+        python manage.py migrate
+
+        # load fixtures (zones -> drones -> telemetry)
+        python manage.py loaddata drones/fixtures/002_zones.json
+        python manage.py loaddata drones/fixtures/003_drones.json
+        python manage.py loaddata drones/fixtures/004_telemetry.json
+        python manage.py loaddata drones/fixtures/001_users_groups.json
+
+        # bootstrap users/groups/perms
+        python manage.py bootstrap_demo
+
+        python manage.py runserver 0.0.0.0:8001
+
+  consumer:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+      mqtt:
+        condition: service_started
+      web:
+        condition: service_started
+    environment:
+      DJANGO_SECRET_KEY: "change-me"
+      DJANGO_DEBUG: "1"
+      DJANGO_ALLOWED_HOSTS: "0.0.0.0,127.0.0.1,localhost"
+      DATABASE_URL: "postgres://sager:sager@db:5432/sager"
+      MQTT_HOST: "mqtt"
+      MQTT_PORT: "1883"
+    volumes:
+      - .:/app
+    command: ["bash", "-lc", "python manage.py migrate && python manage.py mqtt_consumer"]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  mosqdata:
+  mosqlog:

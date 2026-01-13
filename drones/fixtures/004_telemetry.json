@@ -1,0 +1,35 @@
+[
+  {
+    "model": "drones.dronetelemetrypoint",
+    "pk": 1,
+    "fields": {
+      "drone": 1,
+      "latitude": 31.97810,
+      "longitude": 35.83060,
+      "timestamp": "2026-01-12T18:10:00Z",
+      "created_at": "2026-01-12T18:10:00Z"
+    }
+  },
+  {
+    "model": "drones.dronetelemetrypoint",
+    "pk": 2,
+    "fields": {
+      "drone": 1,
+      "latitude": 31.97820,
+      "longitude": 35.83070,
+      "timestamp": "2026-01-12T18:11:00Z",
+      "created_at": "2026-01-12T18:11:00Z"
+    }
+  },
+  {
+    "model": "drones.dronetelemetrypoint",
+    "pk": 3,
+    "fields": {
+      "drone": 1,
+      "latitude": 31.97830,
+      "longitude": 35.83080,
+      "timestamp": "2026-01-12T18:12:00Z",
+      "created_at": "2026-01-12T18:12:00Z"
+    }
+  }
+]
