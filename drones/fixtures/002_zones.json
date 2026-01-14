@@ -4,9 +4,11 @@
     "pk": 1,
     "fields": {
       "name": "Airport No-Fly Zone",
+      "shape": "circle",
       "center_lat": 31.9900,
       "center_lon": 35.9900,
       "radius_km": 3.0,
+      "polygon": [],
       "is_active": true,
       "created_at": "2026-01-12T18:00:00Z"
     }
@@ -15,10 +17,64 @@
     "model": "drones.noflyzone",
     "pk": 2,
     "fields": {
-      "name": "Military Area",
-      "center_lat": 31.9500,
-      "center_lon": 35.8400,
+      "name": "Polygon Test Zone",
+      "shape": "polygon",
+      "center_lat": null,
+      "center_lon": null,
+      "radius_km": null,
+      "polygon": [
+        [35.80, 31.97],
+        [35.85, 31.97],
+        [35.85, 32.00],
+        [35.80, 32.00]
+      ],
+      "is_active": true,
+      "created_at": "2026-01-12T18:00:00Z"
+    }
+  },
+  {
+    "model": "drones.noflyzone",
+    "pk": 3,
+    "fields": {
+      "name": "City Center No-Fly Zone",
+      "shape": "circle",
+      "center_lat": 31.9550,
+      "center_lon": 35.9450,
       "radius_km": 2.0,
+      "polygon": [],
+      "is_active": true,
+      "created_at": "2026-01-12T18:00:00Z"
+    }
+  },
+  {
+    "model": "drones.noflyzone",
+    "pk": 4,
+    "fields": {
+      "name": "Inactive Zone",
+      "shape": "circle",
+      "center_lat": 31.9000,
+      "center_lon": 35.9000,
+      "radius_km": 1.5,
+      "polygon": [],
+      "is_active": false,
+      "created_at": "2026-01-12T18:00:00Z"
+    }
+  },
+  {
+    "model": "drones.noflyzone",
+    "pk": 5,
+    "fields": {
+      "name": "Large Polygon Zone",
+      "shape": "polygon",
+      "center_lat": null,
+      "center_lon": null,
+      "radius_km": null,
+      "polygon": [
+        [35.70, 31.90],
+        [36.00, 31.90],
+        [36.00, 32.10],
+        [35.70, 32.10]
+      ],
       "is_active": true,
       "created_at": "2026-01-12T18:00:00Z"
     }

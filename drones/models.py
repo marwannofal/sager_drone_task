@@ -57,13 +57,27 @@ class DroneTelemetryPoint(models.Model):
 
 # Geofencing as circular no-fly zones
 class NoFlyZone(models.Model):
-    name = models.CharField(max_length=128)
-    center_lat = models.FloatField()
-    center_lon = models.FloatField()
-    radius_km = models.FloatField(default=1.0)
-    is_active = models.BooleanField(default=True)
+    SHAPE_CIRCLE = "circle"
+    SHAPE_POLYGON = "polygon"
+    SHAPE_CHOICES = [
+        (SHAPE_CIRCLE, "Circle"),
+        (SHAPE_POLYGON, "Polygon"),
+    ]
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=128)
+    shape = models.CharField(max_length=16, choices=SHAPE_CHOICES, default=SHAPE_CIRCLE)
+
+    # Circle fields (used when shape == "circle")
+    center_lat = models.FloatField(null=True, blank=True)
+    center_lon = models.FloatField(null=True, blank=True)
+    radius_km = models.FloatField(null=True, blank=True)
+
+    # Polygon fields (used when shape == "polygon")
+    # Stored as list of [lon, lat] pairs (GeoJSON style)
+    polygon = models.JSONField(default=list, blank=True)
+
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         permissions = [
@@ -71,4 +85,6 @@ class NoFlyZone(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"{self.name} ({self.radius_km}km)"
+        if self.shape == self.SHAPE_CIRCLE:
+            return f"{self.name} (circle)"
+        return f"{self.name} (polygon)"

@@ -21,12 +21,6 @@ pytest.xml
 db.sqlite3
 local_settings.py
 settings_local.py
-.env
-.env.*
-.envrc
-*.secret
-*.pem
-*.key
 
 staticfiles/
 media/
@@ -75,6 +69,5 @@ logs/
 log/
 *.out
 
-*.env
 
 pgdata/

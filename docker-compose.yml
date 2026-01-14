@@ -79,7 +79,7 @@ services:
         # bootstrap users/groups/perms
         python manage.py bootstrap_demo
 
-        python manage.py runserver 0.0.0.0:8001
+        python manage.py runserver 0.0.0.0:8000
 
   consumer:
     build: .
